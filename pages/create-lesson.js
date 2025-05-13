@@ -18,26 +18,41 @@ const CreateLesson = () => {
 
     setIsGenerating(true);
     
-    // Simulate API call to AI service
-    setTimeout(() => {
-      setGeneratedContent({
-        title: lessonTitle,
-        subject,
-        gradeLevel,
-        objectives: [
-          "Students will understand the key concepts of the lesson",
-          "Students will be able to apply the knowledge in practical exercises",
-          "Students will demonstrate critical thinking about the subject"
-        ],
-        content: "This is a placeholder for the AI-generated lesson content. In a real implementation, this would be fetched from an AI service based on the user's prompt.",
-        activities: [
-          "Group discussion about the topic",
-          "Hands-on activity to reinforce learning",
-          "Assessment quiz to test understanding"
-        ]
+    try {
+      const response = await fetch('/api/generate-lesson', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lessonTitle,
+          subject,
+          gradeLevel,
+          prompt
+        }),
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(errorData.message || errorData.error || 'Failed to generate lesson');
+      }
+      
+      const data = await response.json();
+      setGeneratedContent(data);
+      console.log('Lesson generated successfully');
+    } catch (error) {
+      console.error('Error generating lesson:', error);
+      let errorMessage = 'Failed to generate lesson. Please try again.';
+      
+      if (error.message.includes('OpenAI API error')) {
+        errorMessage = 'Error with AI service. Please check your API key and try again.';
+      }
+      
+      alert(errorMessage);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   return (
