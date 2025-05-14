@@ -1,4 +1,5 @@
-import { createUser, findUserByEmail } from "../../../lib/db/users";
+
+import { createUser, findUserByEmail } from "@/lib/db/users";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Password must be at least 8 characters" });
     }
 
-    // Check if user already exists
+    // Check if a user already exists
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return res.status(409).json({ error: "User already exists" });

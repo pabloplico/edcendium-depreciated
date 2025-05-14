@@ -1,4 +1,4 @@
-# MCMPORTAL - Teacher Dashboard
+# Edcendium - Teacher Dashboard
 
 A **Next.js application** for education management, featuring AI-generated lesson plans and teacher tools.  
 The platform streamlines lesson planning and management for teachers using modern web technologies and AI assistance.
@@ -6,7 +6,7 @@ The platform streamlines lesson planning and management for teachers using moder
 ---
 
 ## 🚀 **Project Overview**
-MCMPORTAL is built with:
+Edcendium is built with:
 - **Next.js 14.0.0** – Server-side rendering and static site generation
 - **React 18.2.0** – Component-based UI architecture
 - **Tailwind CSS 3.3.3** – Modern, responsive styling

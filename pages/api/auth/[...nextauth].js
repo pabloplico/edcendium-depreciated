@@ -29,6 +29,11 @@ export const authOptions = {
             return null;
           }
           
+          // Check if email is verified
+          if (!user.isVerified) {
+            throw new Error("EmailNotVerified");
+          }
+          
           // Verify password
           const passwordMatch = await bcrypt.compare(credentials.password, user.passwordHash);
           
@@ -41,10 +46,14 @@ export const authOptions = {
             id: user._id.toString(),
             email: user.email,
             name: user.username || user.name,
-            role: user.role || "user"
+            role: user.role || "user",
+            isVerified: user.isVerified
           };
         } catch (error) {
           console.error("Auth error:", error);
+          if (error.message === "EmailNotVerified") {
+            throw new Error("EmailNotVerified");
+          }
           return null;
         }
       }
@@ -67,6 +76,7 @@ export const authOptions = {
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;
+        token.isVerified = user.isVerified;
       }
       
       // Database connection may be needed here for token validation
@@ -77,6 +87,7 @@ export const authOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.isVerified = token.isVerified;
       }
       return session;
     }
